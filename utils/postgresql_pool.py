@@ -39,16 +39,16 @@ class PostgreSQLConnectionPool:
         # Если пароль содержит специальные символы, кодируем его корректно
         if isinstance(password, bytes):
             password = password.decode('utf-8', errors='ignore')
-            self.conn_params = {
-                'host': 'naws-0-eu-central-1.pooler.supabase.com',  # хост Supabase
-                'port': 32786,                                      # порт pgbouncer
-                'database': 'bothost_db_d46ead67f08a',                             # имя базы
-                'user': 'bothost_db_d46ead67f08a',                                 # юзер
-                'password': 'UbbJ6-ugz1YhSMWEeyVMcWCeFYaN25T4w7kKTDF0hU',                        # пароль
-                'sslmode': 'require',                               # обязательно SSL
-                'client_encoding': 'UTF8',
-                'connect_timeout': 10
-            }
+        self.conn_params = {
+            'host': 'naws-0-eu-central-1.pooler.supabase.com',  # хост Supabase
+            'port': 32786,                                      # порт pgbouncer
+            'database': 'bothost_db_d46ead67f08a',                             # имя базы
+            'user': 'bothost_db_d46ead67f08a',                                 # юзер
+            'password': 'UbbJ6-ugz1YhSMWEeyVMcWCeFYaN25T4w7kKTDF0hU',                        # пароль
+            'sslmode': 'require',                               # обязательно SSL
+            'client_encoding': 'UTF8',
+            'connect_timeout': 10
+        }
             
         self.min_connections = min_connections
         self.max_connections = max_connections
