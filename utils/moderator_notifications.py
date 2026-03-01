@@ -1,0 +1,163 @@
+"""
+Система уведомлений для модераторов и администраторов
+Автоматическая отправка сообщений при назначении ролей и прав
+Централизованная логика для всех уведомлений модераторов/администраторов
+"""
+import discord
+from utils.message_manager import get_private_messages
+from utils.logging_setup import get_logger
+
+# Initialize logger
+logger = get_logger(__name__)
+
+
+async def send_moderator_welcome_dm(user: discord.Member) -> bool:
+    """Отправить приветственное сообщение модератору в ЛС"""
+    try:
+        embed = discord.Embed(
+            title=get_private_messages(user.guild.id, 'moderator_notifications.moderator_welcome.title'),
+            description=get_private_messages(user.guild.id, 'moderator_notifications.moderator_welcome.description'),
+            color=discord.Color.blue(),
+            timestamp=discord.utils.utcnow()
+        )
+        
+        embed.add_field(
+            name="🛡️ Ваши права и возможности:",
+            value=(
+                "- **Обработка различного рода заявок**\n> - кнопки `✅ Одобрить` / `❌ Отказать`\n"
+                "- **Обработка запросов склада**\n> - выдача складского имущества\n"
+                "- **Иерархическая модерация**\n> - контроль согласно иерархии discord ролей\n"
+                "- **Кадровый аудит**\n> - доступ к системе учёта персонала\n"
+            ),
+            inline=False
+        )
+        
+        embed.add_field(
+            name="⚠️ Важные ограничения:",
+            value=(
+                "- Вы **НЕ можете** одобрить собственные рапорты\n"
+                "- Вы **НЕ можете** модерировать администраторов или пользователей равного/высшего уровня\n"
+            ),
+            inline=False
+        )
+        
+        embed.add_field(
+            name="❓ Узнайте больше",
+            value=get_private_messages(user.guild.id, 'moderator_notifications.moderator_welcome.help_command'),
+            inline=False
+        )
+        
+        embed.set_footer(text=get_private_messages(user.guild.id, 'moderator_notifications.moderator_welcome.footer'))
+        embed.set_thumbnail(url=user.avatar.url if user.avatar else user.default_avatar.url)
+        
+        await user.send(embed=embed)
+        return True
+        
+    except discord.Forbidden:
+        logger.info(f"Не удалось отправить DM модератору {user.display_name} - закрыты личные сообщения")
+        return False
+    except Exception as e:
+        logger.error(f"Ошибка при отправке DM модератору {user.display_name}: %s", e)
+        return False
+
+
+async def send_administrator_welcome_dm(user: discord.Member) -> bool:
+    """Отправить приветственное сообщение администратору в ЛС"""
+    try:
+        embed = discord.Embed(
+            title=get_private_messages(user.guild.id, 'moderator_notifications.admin_welcome.title'),
+            description=get_private_messages(user.guild.id, 'moderator_notifications.admin_welcome.description'),
+            color=discord.Color.gold(),
+            timestamp=discord.utils.utcnow()
+        )
+        
+        embed.add_field(
+            name="🔑 Ваши расширенные права:",
+            value=(
+                "- **Все права модератора**\n> - полный доступ к обработке заявок\n"
+                "- **Команда `/settings`**\n> - универсальная настройка системы\n"
+                "- **Управление модераторами**\n> - команды `/moder add/remove/list`\n"
+                "- **Управление администраторами**\n> - команды `/admin add/remove/list`\n"
+                "- **Одобрение собственных заявок**\n> - администраторы могут модерировать себя\n"
+                "- **Высший уровень иерархии**\n> - можете модерировать всех пользователей\n"
+            ),
+            inline=False
+        )
+        
+        embed.add_field(
+            name="⚙️ Доступные настройки (/settings):",
+            value=(
+                "- **Каналы подразделений**\n> - настройка заявлений в части\n"
+                "- **Каналы системы**\n> - увольнения, аудит, чёрный список, роли, медицина\n"
+                "- **Система пингов**\n> - настройка уведомлений по подразделениям\n"
+                "- **Роли-исключения**\n> - управление ролями, не снимаемыми при увольнении\n"
+                "- **Лимиты склада**\n> - настройка лимитов по должностям и званиям (НЕ ТЕСТИРОВАЛОСЬ)\n"
+                "- **И другие**\n> - подробности в `/help`\n"
+            ),
+            inline=False
+        )
+        
+        embed.add_field(
+            name="❓ Узнайте больше",
+            value=get_private_messages(user.guild.id, 'moderator_notifications.admin_welcome.help_command'),
+            inline=False
+        )
+        
+        embed.set_footer(text=get_private_messages(user.guild.id, 'moderator_notifications.admin_welcome.footer'))
+        embed.set_thumbnail(url=user.avatar.url if user.avatar else user.default_avatar.url)
+        
+        await user.send(embed=embed)
+        return True
+        
+    except discord.Forbidden:
+        logger.info(f"Не удалось отправить DM администратору {user.display_name} - закрыты личные сообщения")
+        return False
+    except Exception as e:
+        logger.error(f"Ошибка при отправке DM администратору {user.display_name}: %s", e)
+        return False
+
+
+def check_if_user_is_moderator(user: discord.Member, config: dict) -> bool:
+    """Проверить, является ли пользователь уже модератором"""
+    # Владелец сервера и Discord администраторы автоматически считаются администраторами, не модераторами
+    if user.guild.owner_id == user.id or user.guild_permissions.administrator:
+        return False
+    
+    moderators = config.get('moderators', {'users': [], 'roles': []})
+    
+    # Проверяем прямое назначение пользователя
+    if user.id in moderators.get('users', []):
+        return True
+    
+    # Проверяем модераторские роли
+    moderator_role_ids = moderators.get('roles', [])
+    user_role_ids = [role.id for role in user.roles]
+    
+    for role_id in moderator_role_ids:
+        if role_id in user_role_ids:
+            return True
+    
+    return False
+
+
+def check_if_user_is_administrator(user: discord.Member, config: dict) -> bool:
+    """Проверить, является ли пользователь уже администратором"""
+    # Владелец сервера и Discord администраторы автоматически считаются администраторами
+    if user.guild.owner_id == user.id or user.guild_permissions.administrator:
+        return True
+    
+    administrators = config.get('administrators', {'users': [], 'roles': []})
+    
+    # Проверяем прямое назначение пользователя
+    if user.id in administrators.get('users', []):
+        return True
+    
+    # Проверяем администраторские роли
+    admin_role_ids = administrators.get('roles', [])
+    user_role_ids = [role.id for role in user.roles]
+    
+    for role_id in admin_role_ids:
+        if role_id in user_role_ids:
+            return True
+    
+    return False
