@@ -40,12 +40,12 @@ class PostgreSQLConnectionPool:
         if isinstance(password, bytes):
             password = password.decode('utf-8', errors='ignore')
         self.conn_params = {
-            'host': 'aws-0-eu-central-1.pooler.supabase.com',  # хост Supabase
+            'host': 'node1.pghost.ru',  # хост Supabase
             'port': 32786,                                      # порт pgbouncer
             'database': 'bothost_db_d46ead67f08a',                             # имя базы
             'user': 'bothost_db_d46ead67f08a',                                 # юзер
-            'password': 'UbbJ6-ugz1YhSMWEeyVMcWCeFYaN25T4w7kKTDF0hU',                        # пароль
-            'sslmode': 'require',                               # обязательно SSL
+            'password': 'XUbbJ6-ugz1YhSMWEeyVMcWCeFYaN25T4w7kKTDF0hU',                        # пароль
+            'sslmode': 'disable',                               # обязательно SSL
             'client_encoding': 'UTF8',
             'connect_timeout': 10
         }
