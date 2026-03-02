@@ -17,42 +17,30 @@
         "roio": null
     },
     "promotion_notifications": {
-        "va": {
-            "text": null,
-            "image": null,
-            "enabled": false
-        },
-        "vk": {
-            "text": null,
-            "image": null,
-            "enabled": false
-        },
-        "uvp": {
-            "text": null,
-            "image": null,
-            "enabled": false
-        },
-        "sso": {
-            "text": null,
-            "image": null,
-            "enabled": false
-        },
-        "mr": {
-            "text": null,
-            "image": null,
-            "enabled": false
-        },
-        "roio": {
-            "text": null,
-            "image": null,
-            "enabled": false
-        }
+        "va": {"text": null,"image": null,"enabled": false},
+        "vk": {"text": null,"image": null,"enabled": false},
+        "uvp": {"text": null,"image": null,"enabled": false},
+        "sso": {"text": null,"image": null,"enabled": false},
+        "mr": {"text": null,"image": null,"enabled": false},
+        "roio": {"text": null,"image": null,"enabled": false}
     },
-    "notification_schedule": {
-        "hour": 21,
-        "minute": 0
-    },
-    "military_roles": [],
+    "notification_schedule": {"hour": 21,"minute": 0},
+    "military_roles": [
+        {"role_id": 1458909602627322000, "name": "Рядовой полиции"},
+        {"role_id": 1458909601281085554, "name": "Мл. сержант полиции"},
+        {"role_id": 1458909600051888392, "name": "Сержант полиции"},
+        {"role_id": 1458909599016026132, "name": "Ст. сержант полиции"},
+        {"role_id": 1458909597766254937, "name": "Ст. полицейский"},
+        {"role_id": 1458909596537196708, "name": "Прапорщик полиции"},
+        {"role_id": 1458909595274576105, "name": "Ст. прапорщик полиции"},
+        {"role_id": 1458909593517424714, "name": "Мл. лейтенант"},
+        {"role_id": 1458909591495770266, "name": "Лейтенант"},
+        {"role_id": 1458909589826437292, "name": "Ст. лейтенант"},
+        {"role_id": 1458909588442190105, "name": "Капитан полиции"},
+        {"role_id": 1458909586835636284, "name": "Майор полиции"},
+        {"role_id": 1458909585216639199, "name": "Подполковник полиции"},
+        {"role_id": 1458909582905708698, "name": "Полковник полиции"}
+    ],
     "supplier_roles": [],
     "civilian_roles": [],
     "military_role_assignment_ping_roles": [],
@@ -61,66 +49,89 @@
     "excluded_roles": [],
     "ping_settings": {},
     "blacklist_role_mentions": [],
-    "moderators": {
-        "users": [],
-        "roles": []
-    },
-    "administrators": {
-        "users": [],
-        "roles": []
-    },
-    "blacklist": {
-        "users": [],
-        "roles": []
-    },
+    "moderators": {"users": [],"roles": []},
+    "administrators": {"users": [],"roles": []},
+    "blacklist": {"users": [],"roles": []},
     "warehouse_request_channel": 1385238151609585764,
     "warehouse_audit_channel": 1385238191610662912,
     "warehouse_submission_channel": 1386763537023504456,
     "warehouse_cooldown_hours": 6,
-    "warehouse_limits_mode": {
-        "positions_enabled": true,
-        "ranks_enabled": false
-    },
+    "warehouse_limits_mode": {"positions_enabled": true,"ranks_enabled": true},
     "warehouse_limits_positions": {},
-    "warehouse_limits_ranks": {},
+    "warehouse_limits_ranks": {
+        "1458909602627322000": 1,
+        "1458909601281085554": 2,
+        "1458909600051888392": 3,
+        "1458909599016026132": 4,
+        "1458909597766254937": 5,
+        "1458909596537196708": 6,
+        "1458909595274576105": 7,
+        "1458909593517424714": 8,
+        "1458909591495770266": 9,
+        "1458909589826437292": 10,
+        "1458909588442190105": 11,
+        "1458909586835636284": 12,
+        "1458909585216639199": 13,
+        "1458909582905708698": 14
+    },
     "medical_registration_channel": null,
     "medical_role_id": null,
     "medical_vvk_allowed_roles": [],
     "medical_lecture_allowed_roles": [],
-    "departments": {},
+    "departments": {
+        "genstavb": {
+            "name": "genstavb",
+            "description": "Основное подразделение полиции",
+            "emoji": "🦾",
+            "color": 3447003,
+            "role_id": 1458909602627322000,
+            "ping_contexts": {},
+            "application_channel_id": null
+        }
+    },
     "safe_documents_channel": null,
     "nickname_auto_replacement": {
         "enabled": true,
-        "departments": {
-            "УВП": true,
-            "ВА": true,
-            "ВК": true,
-            "РОиО": true,
-            "ГШ": true,
-            "ССО": true,
-            "МР": true
-        },
-        "modules": {
-            "dismissal": true,
-            "department_applications": true,
-            "personnel_commands": true
-        },
-        "known_positions": [
-            "Нач.",
-            "Нач. по КР",
-            "Зам.",
-            "Зам. Ком.",
-            "Ком.",
-            "Ком. Бриг",
-            "Нач. Штаба",
-            "Нач. Отдела",
-            "Зам. Нач. Отдела"
-        ],
-        "format_support": {
-            "standard_with_subgroup": true,
-            "positional_with_subgroup": true,
-            "auto_detect_positions": true
-        },
+        "departments": {"УВП": true,"ВА": true,"ВК": true,"РОиО": true,"ГШ": true,"ССО": true,"МР": true},
+        "modules": {"dismissal": true,"department_applications": true,"personnel_commands": true},
+        "known_positions": ["Нач.","Нач. по КР","Зам.","Зам. Ком.","Ком.","Ком. Бриг","Нач. Штаба","Нач. Отдела","Зам. Нач. Отдела"],
+        "format_support": {"standard_with_subgroup": true,"positional_with_subgroup": true,"auto_detect_positions": true},
         "custom_templates": {}
+    },
+    "recruitment": {
+        "enabled": true,
+        "allow_user_rank_selection": false,
+        "default_rank_id": 1458909602627322000,
+        "allowed_rank_ids": [
+            1458909602627322000,
+            1458909601281085554,
+            1458909600051888392,
+            1458909599016026132,
+            1458909597766254937,
+            1458909596537196708,
+            1458909595274576105,
+            1458909593517424714,
+            1458909591495770266,
+            1458909589826437292,
+            1458909588442190105,
+            1458909586835636284,
+            1458909585216639199,
+            1458909582905708698
+        ],
+        "allow_subdivision_selection": false,
+        "default_subdivision_key": "genstavb",
+        "allowed_subdivision_keys": ["genstavb"]
+    },
+    "electronic_applications": {
+        "enabled": false,
+        "channel_id": null,
+        "template_path": "data/electronic_applications.md",
+        "discord_tag_pattern": "Дискорд для связи с вами:\\s*(?:\\(Пример-\\s*)?@?([\\w.#\\d-]+)",
+        "success_reaction": "✅",
+        "failure_reaction": "❌",
+        "templates": {
+            "вступление": {"path": "data/electronic_applications.md","type_keyword": "Заявление на вступление"},
+            "восстановление": {"path": "data/electronic_applications_restore.md","type_keyword": "Заявление на восстановление"}
+        }
     }
 }
